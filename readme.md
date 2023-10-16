@@ -155,6 +155,41 @@ http://172.17.0.2:80/
 adresse ip du container : 
 $ `docker inspect [id_container]`
 
+## Docker Compose 
+Créer un fichier docker-compose.yml
+```
+version: '3'
+
+services:
+  apache:
+    image: debian:latest
+    container_name: mon-apache-container
+    command: /usr/sbin/apache2 -D FOREGROUND
+    ports:
+      - "80:80"
+    environment:
+      - APACHE_RUN_USER=www-data
+      - APACHE_RUN_GROUP=www-data
+      - APACHE_LOG_DIR=/var/log/apache2
+      - APACHE_PID_FILE=/var/run/apache2.pid
+      - APACHE_RUN_DIR=/var/run/apache2
+      - APACHE_LOCK_DIR=/var/lock/apache2
+    labels:
+      - maintainer=LMLOUIS
+    volumes:
+      - /var/www/html
+```
+### builder l'image docker avec docker compose 
+Une fois que vous avez votre Dockerfile et votre fichier docker-compose.yml prêts, vous pouvez construire l'image Docker en utilisant la commande suivante (assurez-vous d'être dans le répertoire où se trouvent ces fichiers) :
+```|
+docker-compose build
+```
+### Créer le container avec docker compose
+vous pouvez créer un conteneur à partir de l'image que vous avez construite en utilisant la commande docker-compose up 
+```
+docker-compose up -d
+```
+Cela créera un conteneur nommé "mon-apache-container" à partir de l'image que vous avez construite et il écoutera sur le port 80 de votre machine hôte
 
 exporter l'imag dans docker hub 
 
